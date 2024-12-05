@@ -1,0 +1,28 @@
+select date(dt) as cav_date
+, server_id
+, type
+, count(distinct ctwid) as numavatar
+
+from createrole_login_record 
+group by 1,2,3
+
+---------------------------------
+
+
+with create_role as (
+select appid
+, ctwid
+, server_id
+from createrole_login_record
+where type = 'g_createrole'
+group by 1,2,3
+)
+
+select pyr.*
+, cr.server_id
+from user_payment_record pyr
+left join create_role cr on cr.appid=pyr.appid and cr.ctwid = pyr.ctwid and cr.server_id = pyr.server_id
+
+
+
+
